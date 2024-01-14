@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Cohesion NET Core</h1>
+    <h2>Sito di test di funzionamento dell'interfaccia Cohesion per progetti Asp net core</h2>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div>
+            <h3>Login andato a buon fine!</h3>
+            <p>Utente <strong>"@User.Identity.Name"</strong> loggato correttamente.</p>
+            <p>Per effettuare il logout clicca sul pulsante "Esci".</p>
+        </div>
+        <a class="btn btn-primary btn-sm"
+           asp-area=""
+           asp-controller="Account"
+           asp-action="Logout">
+            Esci
+        </a>
+    }
+    else
+    {
+        <p><strong>Attenzione!</strong> Attualmente nessun utente risulta aver effettuato l'accesso alla pagina.</p>
+        <p>Clicca sul pulsante "Accedi" per iniziare la procedura di login con Cohesion.</p>
+        <a class="btn btn-primary btn-sm"
+           asp-area=""
+           asp-controller="Account"
+           asp-action="Login">
+            Accedi
+        </a>
+    }
+</div>
+
