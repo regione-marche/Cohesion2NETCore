@@ -4,6 +4,8 @@ using System.Web;
 using System.Xml;
 using Flurl.Http;
 using CohesionNETCore.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 
 namespace CohesionNETCore.Services
@@ -14,7 +16,7 @@ namespace CohesionNETCore.Services
         {
             string RequestAuth(string urlValidation, string urlReturn);
             AuthCohesionCheckResponse CheckAuth(string auth);
-            string webCheckSessionSSO(string url, string operation, string idsessioneSSO, string idsessioneSSOASPNET);
+            void LogoutFE(ISession _session);
         }
         public class CohesionService : ICohesionService
         {
@@ -113,7 +115,24 @@ namespace CohesionNETCore.Services
                 return res;
             }
 
-            public string webCheckSessionSSO(string url, string operation, string idsessioneSSO, string idsessioneSSOASPNET)
+            public void LogoutFE(ISession _session)
+            {
+                // prendo l'url per effettuare la chiamata di logout a cohesion
+                var ssoWebCheckSession = _appSettings.Value.SSOwebCheckSession;
+
+                // prendo le variabili dalla sessione
+                string idsessioneSSO = _session.GetString("idsessioneSSO");
+                string idsessioneSSOASPNET = _session.GetString("idsessioneSSOASPNET");
+
+                // effettuo la chiamata
+                webCheckSessionSSO(
+                    ssoWebCheckSession,
+                    "LogoutSito",
+                    idsessioneSSO,
+                    idsessioneSSOASPNET);
+            }
+
+            private string webCheckSessionSSO(string url, string operation, string idsessioneSSO, string idsessioneSSOASPNET)
             {
                 var param = $"Operation={operation}&IdSessioneSSO={idsessioneSSO}&IdSessioneASPNET={idsessioneSSOASPNET}";
 

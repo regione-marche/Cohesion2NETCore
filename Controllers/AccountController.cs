@@ -95,21 +95,10 @@ namespace CohesionNETCore.Controllers
         {
             try
             {
-                // prendo l'url per effettuare la chiamata di logout a cohesion
-                var ssoWebCheckSession = _appSettings.Value.SSOwebCheckSession;
+                // effettuo il logout da cohesion
+                _cohesionService.LogoutFE(_session);
 
-                // prendo le variabili dalla sessione
-                string idsessioneSSO = _session.GetString("idsessioneSSO");
-                string idsessioneSSOASPNET = _session.GetString("idsessioneSSOASPNET");
-
-                // effettuo la chiamata
-                string token = _cohesionService.webCheckSessionSSO(
-                    ssoWebCheckSession,
-                    "LogoutSito",
-                    idsessioneSSO,
-                    idsessioneSSOASPNET);
-
-                // effettuo il logout
+                // effettuo il logout dell'utente su asp net 
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 _logger.LogInformation("User logged out.");
                 return RedirectToAction("Index", "Home");
